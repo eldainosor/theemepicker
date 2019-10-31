@@ -73,7 +73,6 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
     private static final String SHAPE_PREFIX = "theme_overlay_shape_";
     private static final String ICON_ANDROID_PREFIX = "theme_overlay_icon_android_";
     private static final String ICON_LAUNCHER_PREFIX = "theme_overlay_icon_launcher_";
-    private static final String ICON_THEMEPICKER_PREFIX = "theme_overlay_icon_themepicker_";
     private static final String ICON_SETTINGS_PREFIX = "theme_overlay_icon_settings_";
     private static final String ICON_SYSUI_PREFIX = "theme_overlay_icon_sysui_";
 
@@ -129,44 +128,71 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
                 builder.setTitle(mStubApkResources.getString(
                         mStubApkResources.getIdentifier(TITLE_PREFIX + themeName,
                                 "string", mStubPackageName)));
+            } catch (NotFoundException e) {
+                Log.d(TAG, "Didn't find title for theme, will use default");
+                builder.setTitle("unknown");
+            }
 
-                String shapeOverlayPackage = getOverlayPackage(SHAPE_PREFIX, themeName);
-                mOverlayProvider.addShapeOverlay(builder, shapeOverlayPackage);
-
-                String fontOverlayPackage = getOverlayPackage(FONT_PREFIX, themeName);
-                mOverlayProvider.addFontOverlay(builder, fontOverlayPackage);
-
+            try {
                 String colorOverlayPackage = getOverlayPackage(COLOR_PREFIX, themeName);
                 mOverlayProvider.addColorOverlay(builder, colorOverlayPackage);
-
-                String iconAndroidOverlayPackage = getOverlayPackage(ICON_ANDROID_PREFIX,
-                        themeName);
-
-                mOverlayProvider.addAndroidIconOverlay(builder, iconAndroidOverlayPackage);
-
-                String iconSysUiOverlayPackage = getOverlayPackage(ICON_SYSUI_PREFIX, themeName);
-
-                mOverlayProvider.addSysUiIconOverlay(builder, iconSysUiOverlayPackage);
-
-                String iconLauncherOverlayPackage = getOverlayPackage(ICON_LAUNCHER_PREFIX,
-                        themeName);
-                mOverlayProvider.addNoPreviewIconOverlay(builder, iconLauncherOverlayPackage);
-
-                String iconThemePickerOverlayPackage = getOverlayPackage(ICON_THEMEPICKER_PREFIX,
-                        themeName);
-                mOverlayProvider.addNoPreviewIconOverlay(builder,
-                        iconThemePickerOverlayPackage);
-
-                String iconSettingsOverlayPackage = getOverlayPackage(ICON_SETTINGS_PREFIX,
-                        themeName);
-
-                mOverlayProvider.addNoPreviewIconOverlay(builder, iconSettingsOverlayPackage);
-
-                mThemes.add(builder.build(mContext));
             } catch (NameNotFoundException | NotFoundException e) {
-                Log.w(TAG, String.format("Couldn't load part of theme %s, will skip it", themeName),
-                        e);
+                Log.d(TAG, "Didn't find color overlay for theme, will use system default");
+                mOverlayProvider.addSystemDefaultColor(builder);
             }
+
+            try {
+                String fontOverlayPackage = getOverlayPackage(FONT_PREFIX, themeName);
+                mOverlayProvider.addFontOverlay(builder, fontOverlayPackage);
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.d(TAG, "Didn't find font overlay for theme, will use system default");
+                mOverlayProvider.addSystemDefaultFont(builder);
+            }
+
+            try {
+                String shapeOverlayPackage = getOverlayPackage(SHAPE_PREFIX, themeName);
+                mOverlayProvider.addShapeOverlay(builder ,shapeOverlayPackage, false);
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.d(TAG, "Didn't find shape overlay for theme, will use system default");
+                mOverlayProvider.addSystemDefaultShape(builder);
+            }
+
+            try {
+                String iconAndroidOverlayPackage = getOverlayPackage(ICON_ANDROID_PREFIX,
+                    themeName);
+                mOverlayProvider.addAndroidIconOverlay(builder, iconAndroidOverlayPackage);
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.d(TAG, "Didn't find Android icons overlay for theme, using system default");
+                mOverlayProvider.addSystemDefaultIcons(builder, ANDROID_PACKAGE, ICONS_FOR_PREVIEW);
+            }
+
+            try {
+                String iconSysUiOverlayPackage = getOverlayPackage(ICON_SYSUI_PREFIX,
+                        themeName);
+                mOverlayProvider.addSysUiIconOverlay(builder, iconSysUiOverlayPackage);
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.d(TAG,
+                    "Didn't find SystemUi icons overlay for theme, using system default");
+                mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, ICONS_FOR_PREVIEW);
+            }
+
+            try {
+                String iconLauncherOverlayPackage = getOverlayPackage(ICON_LAUNCHER_PREFIX,
+                    themeName);
+                mOverlayProvider.addNoPreviewIconOverlay(builder, iconLauncherOverlayPackage);
+            } catch (NotFoundException e) {
+                Log.d(TAG, "Couldn't find launcher icons overlay, won't do anything.");
+            }
+
+            try {
+                String iconSettingsOverlayPackage = getOverlayPackage(ICON_SETTINGS_PREFIX,
+                    themeName);
+                mOverlayProvider.addNoPreviewIconOverlay(builder, iconSettingsOverlayPackage);
+            } catch (NotFoundException e) {
+                Log.d(TAG, "Couldn't find settings icons overlay, won't do anything.");
+            }
+
+            mThemes.add(builder.build(mContext));
         }
 
         addCustomThemes();
