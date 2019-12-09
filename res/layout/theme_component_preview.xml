@@ -46,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:drawablePadding="@dimen/theme_preview_header_drawable_padding"
             android:textAppearance="@style/CardTitleTextAppearance"
             android:importantForAccessibility="no"
