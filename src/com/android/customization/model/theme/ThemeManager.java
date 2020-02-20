@@ -21,6 +21,7 @@ import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_LAUNCHER;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SETTINGS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SYSUI;
+import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_QS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_ANDROID;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SETTINGS;
@@ -62,6 +63,7 @@ public class ThemeManager implements CustomizationManager<ThemeBundle> {
         THEME_CATEGORIES.add(OVERLAY_CATEGORY_ICON_ANDROID);
         THEME_CATEGORIES.add(OVERLAY_CATEGORY_ICON_SETTINGS);
         THEME_CATEGORIES.add(OVERLAY_CATEGORY_ICON_SYSUI);
+        THEME_CATEGORIES.add(OVERLAY_CATEGORY_ICON_QS);
         THEME_CATEGORIES.add(OVERLAY_CATEGORY_ICON_LAUNCHER);
     };
 

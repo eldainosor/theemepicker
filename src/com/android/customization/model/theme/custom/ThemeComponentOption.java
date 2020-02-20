@@ -21,6 +21,7 @@ import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_LAUNCHER;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SETTINGS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_SYSUI;
+import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_QS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_ANDROID;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SETTINGS;
@@ -633,6 +634,90 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
             builder.setShapePath(mPath);
             for (Drawable appIcon : mAppIcons) {
                 builder.addShapePreviewIcon(appIcon);
+            }
+            return super.buildStep(builder);
+        }
+    }
+
+    public static class QSiconOption extends ThemeComponentOption {
+
+        public static final int THUMBNAIL_ICON_POSITION = 0;
+        private static int[] mIconIds = {
+                R.id.preview_icon_0
+        };
+
+        private List<Drawable> mIcons = new ArrayList<>();
+        private String mLabel;
+
+        @Override
+        public void bindThumbnailTile(View view) {
+            Resources res = view.getContext().getResources();
+            Drawable icon = mIcons.get(THUMBNAIL_ICON_POSITION)
+                    .getConstantState().newDrawable().mutate();
+            icon.setTint(res.getColor(R.color.icon_thumbnail_color, null));
+            ((ImageView) view.findViewById(R.id.option_icon)).setImageDrawable(
+                    icon);
+            view.setContentDescription(mLabel);
+        }
+
+        @Override
+        public boolean isActive(CustomizationManager<ThemeComponentOption> manager) {
+            CustomThemeManager customThemeManager = (CustomThemeManager) manager;
+            Map<String, String> themePackages = customThemeManager.getOverlayPackages();
+            if (getOverlayPackages().isEmpty()) {
+                return themePackages.get(OVERLAY_CATEGORY_ICON_QS) == null;
+            }
+            for (Map.Entry<String, String> overlayEntry : getOverlayPackages().entrySet()) {
+                if(!Objects.equals(overlayEntry.getValue(),
+                        themePackages.get(overlayEntry.getKey()))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public int getLayoutResId() {
+            return R.layout.theme_icon_option;
+        }
+
+        @Override
+        public void bindPreview(ViewGroup container) {
+            bindPreviewHeader(container, R.string.preview_name_qsicon, R.drawable.ic_shapes_24px);
+
+            TextView header = container.findViewById(R.id.theme_preview_card_header);
+            header.setText(container.getContext().getString(R.string.preview_name_qsicon) + "\n\u0028" + mLabel + "\u0029");
+            ViewGroup cardBody = container.findViewById(R.id.theme_preview_card_body_container);
+            if (cardBody.getChildCount() == 0) {
+                LayoutInflater.from(container.getContext()).inflate(
+                        R.layout.preview_card_icon_content, cardBody, true);
+            }
+            for (int i = 0; i < mIconIds.length && i < mIcons.size(); i++) {
+                ((ImageView) container.findViewById(mIconIds[i])).setImageDrawable(
+                        mIcons.get(i));
+            }
+        }
+
+        public void addIcon(Drawable previewIcon) {
+            mIcons.add(previewIcon);
+        }
+
+        /**
+         * @return whether this icon option has overlays and previews for all the required packages
+         */
+        public boolean isValid(Context context) {
+            return getOverlayPackages().keySet().size() ==
+                    ResourceConstants.getPackagesToOverlay(context).length;
+        }
+
+        public void setLabel(String label) {
+            mLabel = label;
+        }
+
+        @Override
+        public Builder buildStep(Builder builder) {
+            for (Drawable icon : mIcons) {
+                builder.addIcon(icon);
             }
             return super.buildStep(builder);
         }

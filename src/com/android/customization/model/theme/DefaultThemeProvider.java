@@ -19,6 +19,7 @@ import static android.content.res.Resources.ID_NULL;
 
 import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
 import static com.android.customization.model.ResourceConstants.ICONS_FOR_PREVIEW;
+import static com.android.customization.model.ResourceConstants.QSICONS_FOR_PREVIEW;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_COLOR;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_FONT;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_ANDROID;
@@ -29,6 +30,7 @@ import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SETTINGS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SYSUI;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_SHAPE;
+import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_QS;
 import static com.android.customization.model.ResourceConstants.SYSUI_PACKAGE;
 
 import android.content.ComponentName;
@@ -84,6 +86,7 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
     private static final String ICON_LAUNCHER_PREFIX = "theme_overlay_icon_launcher_";
     private static final String ICON_SETTINGS_PREFIX = "theme_overlay_icon_settings_";
     private static final String ICON_SYSUI_PREFIX = "theme_overlay_icon_sysui_";
+    private static final String QSICON_SYSUI_PREFIX = "theme_overlay_qsicon_sysui_";
     private static final String UISTYLE_ANDROID_PREFIX = "theme_overlay_style_android_";
     private static final String UISTYLE_SETTINGS_PREFIX = "theme_overlay_style_settings_";
     private static final String UISTYLE_SYSUI_PREFIX = "theme_overlay_style_sysui_";
@@ -214,6 +217,15 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
             } catch (NameNotFoundException | NotFoundException e) {
                 Log.d(TAG, "Didn't find Android icons overlay for theme, using system default");
                 mOverlayProvider.addSystemDefaultIcons(builder, ANDROID_PACKAGE, ICONS_FOR_PREVIEW);
+            }
+
+            try {
+                String QSiconSysUiOverlayPackage = getOverlayPackage(QSICON_SYSUI_PREFIX,
+                    themeName);
+                mOverlayProvider.addAndroidIconOverlay(builder, QSiconSysUiOverlayPackage);
+            } catch (NameNotFoundException | NotFoundException e) {
+                Log.d(TAG, "Didn't find Sysui QSicons overlay for theme, using system default");
+                mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, QSICONS_FOR_PREVIEW);
             }
 
             try {
@@ -382,6 +394,15 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
         }
 
         try {
+            String QSiconSysUiOverlayPackage = getOverlayPackage(QSICON_SYSUI_PREFIX,
+                    DEFAULT_THEME_NAME);
+            mOverlayProvider.addQSIconOverlay(builder, QSiconSysUiOverlayPackage);
+        } catch (NameNotFoundException | NotFoundException e) {
+            Log.d(TAG, "Didn't find SysUI QSicons overlay for default theme, using system default");
+            mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, QSICONS_FOR_PREVIEW);
+        }
+
+        try {
             String iconSysUiOverlayPackage = getOverlayPackage(ICON_SYSUI_PREFIX,
                     DEFAULT_THEME_NAME);
             mOverlayProvider.addSysUiIconOverlay(builder, iconSysUiOverlayPackage);
@@ -520,6 +541,8 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
                     customPackages.get(OVERLAY_CATEGORY_ICON_ANDROID));
             mOverlayProvider.addSysUiIconOverlay(builder,
                     customPackages.get(OVERLAY_CATEGORY_ICON_SYSUI));
+            mOverlayProvider.addQSIconOverlay(builder,
+                    customPackages.get(OVERLAY_CATEGORY_ICON_QS));
             mOverlayProvider.addNoPreviewIconOverlay(builder,
                     customPackages.get(OVERLAY_CATEGORY_ICON_SETTINGS));
             mOverlayProvider.addNoPreviewIconOverlay(builder,

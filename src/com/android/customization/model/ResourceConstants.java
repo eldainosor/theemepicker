@@ -62,6 +62,7 @@ public interface ResourceConstants {
     String OVERLAY_CATEGORY_UISTYLE_ANDROID = "android.theme.customization.style.android";
     String OVERLAY_CATEGORY_UISTYLE_SETTINGS = "android.theme.customization.style.settings";
     String OVERLAY_CATEGORY_UISTYLE_SYSUI = "android.theme.customization.style.systemui";
+    String OVERLAY_CATEGORY_ICON_QS = "android.theme.customization.qs_style";
 
     /**
      * Global Android theme category (default theme prebundled with the OS)
@@ -81,6 +82,9 @@ public interface ResourceConstants {
             "ic_qs_dnd",
             "ic_qs_auto_rotate",
             "ic_qs_airplane"
+    };
+    String[] QSICONS_FOR_PREVIEW = {
+            "ic_qs_circle"
     };
 
     ArrayList<String> sTargetPackages = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.android.customization.model.theme;
 
 import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
 import static com.android.customization.model.ResourceConstants.ICONS_FOR_PREVIEW;
+import static com.android.customization.model.ResourceConstants.QSICONS_FOR_PREVIEW;
 import static com.android.customization.model.ResourceConstants.SETTINGS_PACKAGE;
 import static com.android.customization.model.ResourceConstants.SYSUI_PACKAGE;
 
@@ -141,6 +142,15 @@ class OverlayThemeExtractor {
             throws NameNotFoundException {
         if (!TextUtils.isEmpty(iconSysUiOverlayPackage)) {
             addIconOverlay(builder, iconSysUiOverlayPackage);
+        }
+    }
+
+    void addQSIconOverlay(Builder builder, String iconQSOverlayPackage)
+            throws NameNotFoundException {
+        if (!TextUtils.isEmpty(iconQSOverlayPackage)) {
+            addIconOverlay(builder, iconQSOverlayPackage, QSICONS_FOR_PREVIEW);
+        } else {
+            addSystemDefaultIcons(builder, SYSUI_PACKAGE, QSICONS_FOR_PREVIEW);
         }
     }
 

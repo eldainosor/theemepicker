@@ -41,12 +41,14 @@ import com.android.customization.model.theme.custom.CustomTheme;
 import com.android.customization.model.theme.custom.CustomThemeManager;
 import com.android.customization.model.theme.custom.FontOptionsProvider;
 import com.android.customization.model.theme.custom.IconOptionsProvider;
+import com.android.customization.model.theme.custom.QSiconOptionsProvider;
 import com.android.customization.model.theme.custom.UiStyleOptionsProvider;
 import com.android.customization.model.theme.custom.ShapeOptionsProvider;
 import com.android.customization.model.theme.custom.ThemeComponentOption;
 import com.android.customization.model.theme.custom.ThemeComponentOption.ColorOption;
 import com.android.customization.model.theme.custom.ThemeComponentOption.FontOption;
 import com.android.customization.model.theme.custom.ThemeComponentOption.IconOption;
+import com.android.customization.model.theme.custom.ThemeComponentOption.QSiconOption;
 import com.android.customization.model.theme.custom.ThemeComponentOption.UiStyleOption;
 import com.android.customization.model.theme.custom.ThemeComponentOption.ShapeOption;
 import com.android.customization.model.theme.custom.ThemeComponentOptionProvider;
@@ -166,7 +168,8 @@ public class CustomThemeActivity extends FragmentActivity implements
         mSteps.add(new FontStep(new FontOptionsProvider(this, manager), 2));
         mSteps.add(new IconStep(new IconOptionsProvider(this, manager), 3));
         mSteps.add(new ShapeStep(new ShapeOptionsProvider(this, manager), 4));
-        mSteps.add(new NameStep(5));
+        mSteps.add(new QSiconStep(new QSiconOptionsProvider(this, manager), 5));
+        mSteps.add(new NameStep(6));
         mCurrentStep = currentStep;
     }
 
@@ -384,6 +387,22 @@ public class CustomThemeActivity extends FragmentActivity implements
         protected ShapeStep(ThemeComponentOptionProvider<ShapeOption> provider,
                 int position) {
             super(R.string.shape_component_title, provider, position);
+        }
+
+        @Override
+        CustomThemeComponentFragment createFragment(String title) {
+            return CustomThemeComponentFragment.newInstance(
+                    title,
+                    position,
+                    titleResId);
+        }
+    }
+
+    private class QSiconStep extends ComponentStep<QSiconOption> {
+
+        protected QSiconStep(ThemeComponentOptionProvider<QSiconOption> provider,
+                int position) {
+            super(R.string.qsicon_component_title, provider, position);
         }
 
         @Override

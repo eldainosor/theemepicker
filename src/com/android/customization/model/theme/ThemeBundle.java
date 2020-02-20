@@ -22,6 +22,7 @@ import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_ANDROID;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SETTINGS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SYSUI;
+import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_QS;
 import static com.android.customization.model.ResourceConstants.PATH_SIZE;
 
 import android.content.Context;
@@ -259,12 +260,14 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
                 CharSequence shapeName = getOverlayName(pm, OVERLAY_CATEGORY_SHAPE);
                 CharSequence colorName = getOverlayName(pm, OVERLAY_CATEGORY_COLOR);
                 CharSequence styleName = getOverlayName(pm, OVERLAY_CATEGORY_UISTYLE_ANDROID);
+                CharSequence qsStyleName = getOverlayName(pm, OVERLAY_CATEGORY_ICON_QS);
                 mContentDescription = context.getString(R.string.theme_description,
                         TextUtils.isEmpty(fontName) ? defaultName : fontName,
                         TextUtils.isEmpty(iconName) ? defaultName : iconName,
                         TextUtils.isEmpty(shapeName) ? defaultName : shapeName,
                         TextUtils.isEmpty(colorName) ? defaultName : colorName,
-                        TextUtils.isEmpty(styleName) ? defaultName : styleName);
+                        TextUtils.isEmpty(styleName) ? defaultName : styleName,
+                        TextUtils.isEmpty(qsStyleName) ? defaultName : qsStyleName);
             }
         }
         return mContentDescription;

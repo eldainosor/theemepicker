@@ -89,6 +89,9 @@
     <!-- Title of a page that shows the user the preview of a set of icons' shape [CHAR_LIMIT=20] -->
     <string name="preview_name_shape">Shape</string>
 
+    <!-- Title of a page that shows the user the preview of a set of QS icons [CHAR_LIMIT=20] -->
+    <string name="preview_name_qsicon">Quick Settings Tiles</string>
+
     <!-- Title of a page that shows the user the preview of a wallpaper associated with a theme [CHAR_LIMIT=20] -->
     <string name="preview_name_wallpaper">Wallpaper</string>
 
@@ -145,11 +148,17 @@
     <!-- Title of a page allowing the user to choose an icon shape for a custom theme [CHAR LIMIT=40]-->
     <string name="shape_component_title">Choose shape</string>
 
+    <!-- Title of a page allowing the user to choose an QS icon for a custom theme [CHAR LIMIT=40]-->
+    <string name="qsicon_component_title">Choose QS Style</string>
+
     <!-- Title of a page allowing the user to set a name for a custom theme [CHAR LIMIT=40]-->
     <string name="name_component_title">Name your style</string>
 
     <!-- Title of a set of icons that the user can chose for their custom style (eg, "Icons 2") -->
     <string name="icon_component_label">Icons <xliff:g name="component_number" example="1">%1$d</xliff:g></string>
+
+    <!-- Title of a set of QS icons that the user can chose for their custom style -->
+    <string name="qsicon_component_label">Icons <xliff:g name="qs_component_number" example="1">%1$d</xliff:g></string>
 
     <string name="font_component_option_thumbnail" translatable="false">Aa</string>
 
