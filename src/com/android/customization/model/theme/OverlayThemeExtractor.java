@@ -145,7 +145,7 @@ class OverlayThemeExtractor {
         }
     }
 
-    void addQSIconOverlay(Builder builder, String iconQSOverlayPackage)
+    void addQsStyleOverlay(Builder builder, String iconQSOverlayPackage)
             throws NameNotFoundException {
         if (!TextUtils.isEmpty(iconQSOverlayPackage)) {
             addIconOverlay(builder, iconQSOverlayPackage, QSICONS_FOR_PREVIEW);
@@ -208,6 +208,38 @@ class OverlayThemeExtractor {
                 system.getIdentifier(ResourceConstants.CONFIG_ICON_MASK,
                         "string", ResourceConstants.ANDROID_PACKAGE));
         builder.setShapePath(iconMaskPath);
+    }
+
+    void addSystemDefaultQsStyle(Builder builder) {
+        Resources system = Resources.getSystem();
+        Configuration configuration = mContext.getResources().getConfiguration();
+        boolean nightMode = (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES ? true : false;
+
+        // Use the shape as default
+        String defaultShape = system.getString(
+                system.getIdentifier(ResourceConstants.CONFIG_ICON_MASK,
+                        "string", ResourceConstants.ANDROID_PACKAGE));
+
+        // Set the 2 basic foreground color
+        int tileBackground;
+        int tileForeground;
+        if (nightMode) {
+            tileBackground = system.getColor(
+                    system.getIdentifier(ResourceConstants.ACCENT_COLOR_DARK_NAME, "color",
+                            ResourceConstants.ANDROID_PACKAGE), null);
+            tileForeground = system.getColor(
+                    system.getIdentifier(ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME, "color",
+                            ResourceConstants.ANDROID_PACKAGE), null);
+        } else {
+            tileBackground = system.getColor(
+                    system.getIdentifier(ResourceConstants.ACCENT_COLOR_LIGHT_NAME, "color",
+                            ResourceConstants.ANDROID_PACKAGE), null);
+            tileForeground = system.getColor(
+                    system.getIdentifier(ResourceConstants.STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color",
+                            ResourceConstants.ANDROID_PACKAGE), null);
+        }
+        builder.setQsStyle(defaultShape, tileBackground, tileForeground);
     }
 
     void addSystemDefaultColor(Builder builder) {

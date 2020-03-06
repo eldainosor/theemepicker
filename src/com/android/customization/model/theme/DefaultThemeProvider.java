@@ -19,7 +19,6 @@ import static android.content.res.Resources.ID_NULL;
 
 import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
 import static com.android.customization.model.ResourceConstants.ICONS_FOR_PREVIEW;
-import static com.android.customization.model.ResourceConstants.QSICONS_FOR_PREVIEW;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_COLOR;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_FONT;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ICON_ANDROID;
@@ -86,7 +85,7 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
     private static final String ICON_LAUNCHER_PREFIX = "theme_overlay_icon_launcher_";
     private static final String ICON_SETTINGS_PREFIX = "theme_overlay_icon_settings_";
     private static final String ICON_SYSUI_PREFIX = "theme_overlay_icon_sysui_";
-    private static final String QSICON_SYSUI_PREFIX = "theme_overlay_qsicon_sysui_";
+    private static final String QSSTYLE_SYSUI_PREFIX = "theme_overlay_qsstyle_sysui_";
     private static final String UISTYLE_ANDROID_PREFIX = "theme_overlay_style_android_";
     private static final String UISTYLE_SETTINGS_PREFIX = "theme_overlay_style_settings_";
     private static final String UISTYLE_SYSUI_PREFIX = "theme_overlay_style_sysui_";
@@ -220,12 +219,12 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
             }
 
             try {
-                String QSiconSysUiOverlayPackage = getOverlayPackage(QSICON_SYSUI_PREFIX,
+                String qsStylesSysUiOverlayPackage = getOverlayPackage(QSSTYLE_SYSUI_PREFIX,
                     themeName);
-                mOverlayProvider.addAndroidIconOverlay(builder, QSiconSysUiOverlayPackage);
+                mOverlayProvider.addAndroidIconOverlay(builder, qsStylesSysUiOverlayPackage);
             } catch (NameNotFoundException | NotFoundException e) {
-                Log.d(TAG, "Didn't find Sysui QSicons overlay for theme, using system default");
-                mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, QSICONS_FOR_PREVIEW);
+                Log.d(TAG, "Didn't find Sysui QS Style overlay for theme, using system default");
+                mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, ICONS_FOR_PREVIEW);
             }
 
             try {
@@ -394,7 +393,7 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
         }
 
         try {
-            String QSiconSysUiOverlayPackage = getOverlayPackage(QSICON_SYSUI_PREFIX,
+            String QSiconSysUiOverlayPackage = getOverlayPackage(QSSTYLE_SYSUI_PREFIX,
                     DEFAULT_THEME_NAME);
             mOverlayProvider.addQSIconOverlay(builder, QSiconSysUiOverlayPackage);
         } catch (NameNotFoundException | NotFoundException e) {

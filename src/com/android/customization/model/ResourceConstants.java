@@ -83,9 +83,6 @@ public interface ResourceConstants {
             "ic_qs_auto_rotate",
             "ic_qs_airplane"
     };
-    String[] QSICONS_FOR_PREVIEW = {
-            "ic_qs_circle"
-    };
 
     ArrayList<String> sTargetPackages = new ArrayList<>();
     String ACCENT_COLOR_LIGHT_NAME = "accent_device_default_light";
@@ -96,6 +93,12 @@ public interface ResourceConstants {
     String STYLE_BACKGROUND_COLOR_LIGHT_NAME = "background_material_light";
     String STYLE_BACKGROUND_COLOR_DARK_NAME = "background_material_dark";
     String STYLE_UI_ROUNDNESS_NAME = "config_dialogCornerRadius";
+
+    String QS_STYLE_FLAG_USE_MASK = "config_useMaskForQs";
+    String QS_STYLE_FLAG_USE_COLORS = "config_enable_qs_tile_tinting";
+    String QS_STYLE_BACKGROUND_NAME = "ic_qs_circle";
+    String QS_STYLE_COLOR_FOREGROUND_ACTIVE_NAME = "qs_tiles_active_tint";
+    String QS_STYLE_COLOR_BACKGROUND_ACTIVE_NAME = "qs_tiles_background_active_tint";
 
     float PATH_SIZE = 100f;
 
