@@ -166,8 +166,7 @@ class ThemeOptionPreviewer implements LifecycleObserver {
         setTopBarIcons(previewInfo.icons);
         setAppIconShape(previewInfo.shapeAppIcons);
         setColorAndIconsSection(previewInfo.icons, previewInfo.shapeDrawable,
-                previewInfo.resolveAccentColor(mContext.getResources()),
-                previewInfo.resolveStyleBackgroundColor(mContext.getResources()));
+                previewInfo.resolveAccentColor(mContext.getResources()));
         mHasPreviewInfoSet = true;
         showPreviewIfHasAllConfigSet();
     }
@@ -295,7 +294,7 @@ class ThemeOptionPreviewer implements LifecycleObserver {
     }
 
     private void setColorAndIconsSection(List<Drawable> icons, Drawable shapeDrawable,
-                                         int accentColor, int uiStyleColor) {
+                                         int accentColor) {
         // Set QS icons and background.
         for (int i = 0; i < mColorTileIconIds.length && i < icons.size(); i++) {
             Drawable icon = icons.get(mColorTileIconIds[i][1]).getConstantState()
@@ -319,9 +318,6 @@ class ThemeOptionPreviewer implements LifecycleObserver {
                 ((Switch) button).setTrackTintList(tintList);
             }
         }
-
-        // Set the color of the main card view
-        ((CardView) mContentView.findViewById(R.id.color_icons_section)).setBackgroundColor(uiStyleColor);
     }
 
     private void updateTime() {
