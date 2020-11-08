@@ -16,7 +16,6 @@
 package com.android.customization.model.theme.custom;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -114,7 +113,4 @@ public class CustomThemeManager implements CustomizationManager<ThemeComponentOp
         return new CustomThemeManager(themeManager.getCurrentOverlays(), customTheme);
     }
 
-    public int resolveAccentColor(Resources res) {
-        return mBuilder.resolveAccentColor(res);
-    }
 }
