@@ -88,7 +88,9 @@ class OverlayThemeExtractor {
                     .setBackgroundColorLight(loadColor(ResourceConstants.STYLE_BACKGROUND_COLOR_LIGHT_NAME,
                             uiStyleOverlayPackage))
                     .setBackgroundColorDark(loadColor(ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME,
-                            uiStyleOverlayPackage));
+                            uiStyleOverlayPackage))
+                    .setBottomSheetCornerRadius(
+                            loadDimen(ResourceConstants.CONFIG_CORNERRADIUS, uiStyleOverlayPackage));
         } else {
             addSystemDefaultStyle(builder);
         }
@@ -238,6 +240,11 @@ class OverlayThemeExtractor {
                 system.getIdentifier(ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME, "color",
                         ResourceConstants.ANDROID_PACKAGE), null);
         builder.setBackgroundColorDark(colorBackgroundDark);
+
+        builder.setBottomSheetCornerRadius(
+                        system.getDimensionPixelOffset(
+                                system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                                        "dimen", ResourceConstants.ANDROID_PACKAGE)));
     }
 
     void addSystemDefaultFont(Builder builder) {

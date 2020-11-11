@@ -168,6 +168,7 @@ class ThemeOptionPreviewer implements LifecycleObserver {
         setColorAndIconsSection(previewInfo.icons, previewInfo.shapeDrawable,
                 previewInfo.resolveAccentColor(mContext.getResources()),
                 previewInfo.resolveStyleBackgroundColor(mContext.getResources()));
+        setColorAndIconsBoxRadius(previewInfo.bottomSheeetCornerRadius);
         mHasPreviewInfoSet = true;
         showPreviewIfHasAllConfigSet();
     }
@@ -322,6 +323,10 @@ class ThemeOptionPreviewer implements LifecycleObserver {
 
         // Set the color of the main card view
         ((CardView) mContentView.findViewById(R.id.color_icons_section)).setBackgroundColor(uiStyleColor);
+    }
+
+    private void setColorAndIconsBoxRadius(int cornerRadius) {
+        ((CardView) mContentView.findViewById(R.id.color_icons_section)).setRadius(cornerRadius);
     }
 
     private void updateTime() {
