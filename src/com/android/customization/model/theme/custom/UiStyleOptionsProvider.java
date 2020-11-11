@@ -18,6 +18,7 @@ package com.android.customization.model.theme.custom;
 import static com.android.customization.model.ResourceConstants.STYLE_BACKGROUND_COLOR_LIGHT_NAME;
 import static com.android.customization.model.ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME;
 import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
+import static com.android.customization.model.ResourceConstants.CONFIG_CORNERRADIUS;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_ANDROID_THEME;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_ANDROID;
 import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_UISTYLE_SETTINGS;
@@ -32,6 +33,8 @@ import android.content.res.Resources.NotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
 import android.util.Log;
+
+import androidx.annotation.Dimension;
 
 import com.android.customization.model.ResourceConstants;
 import com.android.customization.model.theme.OverlayManagerCompat;
@@ -90,9 +93,10 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
                 int darkColor = overlayRes.getColor(
                         overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", overlayPackage),
                         null);
+                int cornerRadius = loadCornerRadius(overlayPackage);
                 PackageManager pm = mContext.getPackageManager();
                 String label = pm.getApplicationInfo(overlayPackage, 0).loadLabel(pm).toString();
-                option.addStyleInfo(overlayPackage, label, lightColor, darkColor, accentColor);
+                option.addStyleInfo(overlayPackage, label, lightColor, darkColor, accentColor, cornerRadius);
                 mOptions.add(option);
             } catch (NameNotFoundException | NotFoundException e) {
                 Log.w(TAG, String.format("Couldn't load UI style overlay %s, will skip it",
@@ -129,8 +133,19 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
         return option;
     }
 
+    @Dimension
+    private int loadCornerRadius(String packageName)
+            throws NameNotFoundException, NotFoundException {
+
+        Resources overlayRes =
+                mContext.getPackageManager().getResourcesForApplication(
+                        packageName);
+        return overlayRes.getDimensionPixelOffset(overlayRes.getIdentifier(
+                CONFIG_CORNERRADIUS, "dimen", packageName));
+    }
+
     private void addDefault() {
-        int lightColor, darkColor;
+        int lightColor, darkColor, cornerRadius;
         UiStyleOption option = new UiStyleOption();
         Resources system = Resources.getSystem();
         int accentColor = mCustomThemeManager.resolveAccentColor(mContext.getResources());
@@ -142,6 +157,7 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
             darkColor = r.getColor(
                     r.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", mDefaultThemePackage),
                     null);
+            cornerRadius = loadCornerRadius(mDefaultThemePackage);
         } catch (NotFoundException | NameNotFoundException e) {
             Log.d(TAG, "Didn't find default style, will use system option", e);
 
@@ -150,9 +166,12 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
 
             darkColor = system.getColor(
                     system.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", ANDROID_PACKAGE), null);
+            cornerRadius = system.getDimensionPixelOffset(
+                        system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                                "dimen", ResourceConstants.ANDROID_PACKAGE));
         }
         option.addStyleInfo(null,
-                mContext.getString(R.string.default_theme_title), lightColor, darkColor, accentColor);
+                mContext.getString(R.string.default_theme_title), lightColor, darkColor, accentColor, cornerRadius);
         option.addOverlayPackage(OVERLAY_CATEGORY_UISTYLE_SYSUI, null);
         option.addOverlayPackage(OVERLAY_CATEGORY_UISTYLE_SETTINGS, null);
         mOptions.add(option);
