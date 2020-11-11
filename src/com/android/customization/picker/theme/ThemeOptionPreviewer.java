@@ -169,7 +169,6 @@ class ThemeOptionPreviewer implements LifecycleObserver {
                 previewInfo.resolveAccentColor(mContext.getResources()),
                 previewInfo.resolveStyleBackgroundColor(mContext.getResources()));
         setColorAndIconsBoxRadius(previewInfo.bottomSheeetCornerRadius);
-        setQsbRadius(previewInfo.bottomSheeetCornerRadius);
         mHasPreviewInfoSet = true;
         showPreviewIfHasAllConfigSet();
     }
@@ -328,20 +327,6 @@ class ThemeOptionPreviewer implements LifecycleObserver {
 
     private void setColorAndIconsBoxRadius(int cornerRadius) {
         ((CardView) mContentView.findViewById(R.id.color_icons_section)).setRadius(cornerRadius);
-    }
-
-    private void setQsbRadius(int cornerRadius) {
-        View qsb = mContentView.findViewById(R.id.theme_qsb);
-        if (qsb != null && qsb.getVisibility() == View.VISIBLE) {
-            if (qsb.getBackground() instanceof GradientDrawable) {
-                GradientDrawable bg = (GradientDrawable) qsb.getBackground();
-                float radius = useRoundedQSB(cornerRadius)
-                        ? (float) qsb.getLayoutParams().height / 2 : cornerRadius;
-                bg.setCornerRadii(new float[]{
-                        radius, radius, radius, radius,
-                        radius, radius, radius, radius});
-            }
-        }
     }
 
     private void updateTime() {

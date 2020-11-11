@@ -463,6 +463,7 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
         @ColorInt private int mBackgroundColorLight;
         @ColorInt private int mBackgroundColorDark;
         @ColorInt private int mAccentColor;
+        private int mCornerRadius;
 
         private String mLabel;
 
@@ -499,11 +500,12 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
             return true;
         }
 
-        public void addStyleInfo(String packageName, String label, @ColorInt int backgroundColorLight,@ColorInt int backgroundColorDark, @ColorInt int accentColor) {
+        public void addStyleInfo(String packageName, String label, @ColorInt int backgroundColorLight,@ColorInt int backgroundColorDark, @ColorInt int accentColor, @Dimension int cornerRadius) {
             mLabel = label;
             mBackgroundColorLight = backgroundColorLight;
             mBackgroundColorDark = backgroundColorDark;
             mAccentColor = accentColor;
+            mCornerRadius = cornerRadius;
         }
 
         @Override
@@ -573,7 +575,7 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
 
         @Override
         public Builder buildStep(Builder builder) {
-	          builder.setBackgroundColorLight(mBackgroundColorLight).setBackgroundColorDark(mBackgroundColorDark);
+	          builder.setBackgroundColorLight(mBackgroundColorLight).setBackgroundColorDark(mBackgroundColorDark).setBottomSheetCornerRadius(mCornerRadius);
             return super.buildStep(builder);
         }
     }
