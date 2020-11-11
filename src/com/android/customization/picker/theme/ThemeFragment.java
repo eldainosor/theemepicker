@@ -268,32 +268,36 @@ public class ThemeFragment extends AppbarFragment {
                 mOptionsController = new OptionSelectorController<>(mOptionsContainer, options);
                 mOptionsController.initOptions(mThemeManager);
 
-                // Find out the selected theme option.
-                // 1. Find previously selected theme.
-                String previouslySelected = savedInstanceState != null
-                        ? savedInstanceState.getString(KEY_SELECTED_THEME) : null;
-                ThemeBundle previouslySelectedTheme = null;
-                ThemeBundle activeTheme = null;
-                for (ThemeBundle theme : options) {
-                    if (previouslySelected != null
-                            && previouslySelected.equals(theme.getSerializedPackages())) {
-                        previouslySelectedTheme = theme;
+                try {
+                    // Find out the selected theme option.
+                    // 1. Find previously selected theme.
+                    String previouslySelected = savedInstanceState != null
+                            ? savedInstanceState.getString(KEY_SELECTED_THEME) : null;
+                    ThemeBundle previouslySelectedTheme = null;
+                    ThemeBundle activeTheme = null;
+                    for (ThemeBundle theme : options) {
+                        if (previouslySelected != null
+                                && previouslySelected.equals(theme.getSerializedPackages())) {
+                            previouslySelectedTheme = theme;
+                        }
+                        if (theme.isActive(mThemeManager)) {
+                            activeTheme = theme;
+                        }
                     }
-                    if (theme.isActive(mThemeManager)) {
-                        activeTheme = theme;
+                    // 2. Use active theme if no previously selected theme.
+                    mSelectedTheme = previouslySelectedTheme != null
+                            ? previouslySelectedTheme
+                            : activeTheme;
+                    // 3. Select the default theme if there is no matching custom enabled theme.
+                    if (mSelectedTheme == null) {
+                        mSelectedTheme = findDefaultThemeBundle(options);
                     }
-                }
-                // 2. Use active theme if no previously selected theme.
-                mSelectedTheme = previouslySelectedTheme != null
-                        ? previouslySelectedTheme
-                        : activeTheme;
-                // 3. Select the default theme if there is no matching custom enabled theme.
-                if (mSelectedTheme == null) {
-                    mSelectedTheme = findDefaultThemeBundle(options);
-                }
 
-                mOptionsController.setSelectedOption(mSelectedTheme);
-                onOptionSelected(mSelectedTheme);
+                    mOptionsController.setSelectedOption(mSelectedTheme);
+                    onOptionSelected(mSelectedTheme);
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "Could not find exactly the current theme", e)
+                }
                 restoreBottomActionBarVisibility(savedInstanceState);
 
                 mOptionsController.addListener(selectedOption -> {
