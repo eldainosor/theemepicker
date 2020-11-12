@@ -114,9 +114,7 @@ class OverlayThemeExtractor {
             builder.addOverlayPackage(getOverlayCategory(shapeOverlayPackage),
                     shapeOverlayPackage)
                     .setShapePath(
-                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage))
-                    .setBottomSheetCornerRadius(
-                            loadDimen(ResourceConstants.CONFIG_CORNERRADIUS, shapeOverlayPackage));
+                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage));
         } else {
             addSystemDefaultShape(builder);
         }
@@ -215,11 +213,7 @@ class OverlayThemeExtractor {
         String iconMaskPath = system.getString(
                 system.getIdentifier(ResourceConstants.CONFIG_ICON_MASK,
                         "string", ResourceConstants.ANDROID_PACKAGE));
-        builder.setShapePath(iconMaskPath)
-                .setBottomSheetCornerRadius(
-                        system.getDimensionPixelOffset(
-                                system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
-                                        "dimen", ResourceConstants.ANDROID_PACKAGE)));
+        builder.setShapePath(iconMaskPath);
     }
 
     void addSystemDefaultColor(Builder builder) {
