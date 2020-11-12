@@ -225,14 +225,24 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
                 mOverlayProvider.addSystemDefaultIcons(builder, SYSUI_PACKAGE, ICONS_FOR_PREVIEW);
             }
 
-            String iconLauncherOverlayPackage = getOverlayPackage(ICON_LAUNCHER_PREFIX,
-                    themeName);
-            mOverlayProvider.addNoPreviewIconOverlay(builder, iconLauncherOverlayPackage);
+            try {
+                String iconLauncherOverlayPackage = getOverlayPackage(ICON_LAUNCHER_PREFIX,
+                         themeName);
+                mOverlayProvider.addNoPreviewIconOverlay(builder, iconLauncherOverlayPackage);
+            } catch (NotFoundException e) {
+                Log.d(TAG,
+                    "Didn't find Launcher icons overlay for theme, moving on");
+            }
 
-            String iconSettingsOverlayPackage = getOverlayPackage(ICON_SETTINGS_PREFIX,
-                    themeName);
+            try {
+                  String iconSettingsOverlayPackage = getOverlayPackage(ICON_SETTINGS_PREFIX,
+                          themeName);
 
-            mOverlayProvider.addNoPreviewIconOverlay(builder, iconSettingsOverlayPackage);
+                  mOverlayProvider.addNoPreviewIconOverlay(builder, iconSettingsOverlayPackage);
+            } catch (NotFoundException e) {
+                Log.d(TAG,
+                    "Didn't find Launcher icons overlay for theme, moving on");
+            }
 
             mThemes.add(builder.build(mContext));
         }
