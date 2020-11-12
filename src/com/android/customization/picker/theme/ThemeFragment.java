@@ -296,7 +296,7 @@ public class ThemeFragment extends AppbarFragment {
                     mOptionsController.setSelectedOption(mSelectedTheme);
                     onOptionSelected(mSelectedTheme);
                 } catch (IllegalArgumentException e) {
-                    Log.w(TAG, "Could not find exactly the current theme", e)
+                    Log.w(TAG, "Could not find exactly the current theme", e);
                 }
                 restoreBottomActionBarVisibility(savedInstanceState);
 
