@@ -59,6 +59,11 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
     private final List<String> mSysUiStylesOverlayPackages = new ArrayList<>();
     private final List<String> mSettingsStylesOverlayPackages = new ArrayList<>();
 
+    private int UI_STYLE_UNSUPPORTED = -1;
+    private int UI_STYLE_SUPPORT_BOTH = 0;
+    private int UI_STYLE_LIGHT_ONLY = 1;
+    private int UI_STYLE_DARK_ONLY = 2;
+
     public UiStyleOptionsProvider(Context context, OverlayManagerCompat manager,
             CustomThemeManager customThemeManager) {
         super(context, manager, OVERLAY_CATEGORY_UISTYLE_ANDROID);
@@ -87,15 +92,22 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
                     OVERLAY_CATEGORY_UISTYLE_ANDROID);
             try {
                 Resources overlayRes = getOverlayResources(overlayPackage);
-                int lightColor = overlayRes.getColor(
-                        overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color", overlayPackage),
-                        null);
-                int darkColor = overlayRes.getColor(
-                        overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", overlayPackage),
-                        null);
-                int cornerRadius = loadCornerRadius(overlayPackage);
+                int lightColor = getSafeLightColor(overlayRes, overlayPackage);
+                int darkColor = getSafeDarkColor(overlayRes, overlayPackage);
+                int cornerRadius = getSafeCornerRadius(overlayPackage);
                 PackageManager pm = mContext.getPackageManager();
-                String label = pm.getApplicationInfo(overlayPackage, 0).loadLabel(pm).toString();
+
+                StringBuilder uiLabel = new StringBuilder(
+                      pm.getApplicationInfo(overlayPackage, 0).loadLabel(pm).toString());
+                if (getStyleLevel(overlayRes, overlayPackage) == UI_STYLE_LIGHT_ONLY) {
+                    uiLabel.append(
+                        mContext.getResources().getString(R.string.ui_styles_suffix_light_only));
+                } else if (getStyleLevel(overlayRes, overlayPackage) == UI_STYLE_DARK_ONLY) {
+                    uiLabel.append(
+                        mContext.getResources().getString(R.string.ui_styles_suffix_dark_only));
+                }
+
+                String label = uiLabel.toString();
                 option.addStyleInfo(overlayPackage, label, lightColor, darkColor, accentColor, cornerRadius);
                 mOptions.add(option);
             } catch (NameNotFoundException | NotFoundException e) {
@@ -134,6 +146,21 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
     }
 
     @Dimension
+    private int getSafeCornerRadius(String packageName) {
+        Resources system = Resources.getSystem();
+        int cornerRadius;
+        try {
+            cornerRadius = loadCornerRadius(packageName);
+        } catch (NameNotFoundException | NotFoundException e) {
+            Log.w(TAG, "Couldn't get the rounded corners for this theme, using system default", e);
+            cornerRadius = system.getDimensionPixelOffset(
+                        system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                                "dimen", ResourceConstants.ANDROID_PACKAGE));
+        }
+        return cornerRadius;
+    }
+
+    @Dimension
     private int loadCornerRadius(String packageName)
             throws NameNotFoundException, NotFoundException {
 
@@ -142,6 +169,58 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
                         packageName);
         return overlayRes.getDimensionPixelOffset(overlayRes.getIdentifier(
                 CONFIG_CORNERRADIUS, "dimen", packageName));
+    }
+
+    private int getSafeLightColor(Resources overlayRes, String overlayPackage) {
+        int lightColor;
+        Resources system = Resources.getSystem();
+        try {
+            lightColor = overlayRes.getColor(
+                overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color", overlayPackage),
+                null);
+        } catch (NotFoundException e) {
+            Log.w(TAG,"Couldn't find light color for this theme, using system default", e);
+            lightColor = system.getColor(
+                system.getIdentifier(STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color", ANDROID_PACKAGE), null);
+        }
+        return lightColor;
+    }
+
+    private int getSafeDarkColor(Resources overlayRes, String overlayPackage) {
+        int darkColor;
+        Resources system = Resources.getSystem();
+        try {
+            darkColor = overlayRes.getColor(
+                overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", overlayPackage),
+                null);
+        } catch (NotFoundException e) {
+            Log.w(TAG,"Couldn't find dark color for this theme, using system default", e);
+            darkColor = system.getColor(
+                system.getIdentifier(STYLE_BACKGROUND_COLOR_DARK_NAME, "color", ANDROID_PACKAGE), null);
+        }
+        return darkColor;
+    }
+
+    private int getStyleLevel(Resources overlayRes, String overlayPackage) {
+        boolean gotLightMode;
+        int result = UI_STYLE_UNSUPPORTED;
+        try {
+            int lightColor = overlayRes.getColor(
+                overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color", overlayPackage),
+                null);
+            gotLightMode = true;
+        } catch (NotFoundException e) {
+            gotLightMode = false;
+        }
+        try {
+            int darkColor = overlayRes.getColor(
+                overlayRes.getIdentifier(STYLE_BACKGROUND_COLOR_LIGHT_NAME, "color", overlayPackage),
+                null);
+            result = gotLightMode ? UI_STYLE_SUPPORT_BOTH : UI_STYLE_DARK_ONLY;
+        } catch (NotFoundException e) {
+            result = gotLightMode ? UI_STYLE_LIGHT_ONLY : UI_STYLE_UNSUPPORTED;
+        }
+        return result;
     }
 
     private void addDefault() {
