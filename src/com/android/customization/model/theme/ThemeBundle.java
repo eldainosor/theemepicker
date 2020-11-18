@@ -293,9 +293,9 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
         }
 
         private PreviewInfo(Context context, Typeface bodyFontFamily, Typeface headlineFontFamily,
-                int colorAccentLight, int colorAccentDark, List<Drawable> icons,
-                Drawable shapeDrawable, int colorStyleBackgroundLight, 
-                int colorStyleBackgroundDark,@Dimension int cornerRadius,
+                int colorAccentLight, int colorAccentDark, int colorStyleBackgroundLight, 
+                int colorStyleBackgroundDark, List<Drawable> icons,
+                Drawable shapeDrawable, @Dimension int cornerRadius,
                 List<ShapeAppIcon> shapeAppIcons) {
             this.bodyFontFamily = bodyFontFamily;
             this.headlineFontFamily = headlineFontFamily;
