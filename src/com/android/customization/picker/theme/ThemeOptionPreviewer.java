@@ -323,7 +323,7 @@ class ThemeOptionPreviewer implements LifecycleObserver {
         }
 
         // Set the color of the main card view
-        ((CardView) mContentView.findViewById(R.id.color_icons_section)).setBackgroundColor(uiStyleColor);
+        ((CardView) mContentView.findViewById(R.id.color_icons_section)).setCardBackgroundColor(uiStyleColor);
     }
 
     private void setColorAndIconsBoxRadius(int cornerRadius) {
