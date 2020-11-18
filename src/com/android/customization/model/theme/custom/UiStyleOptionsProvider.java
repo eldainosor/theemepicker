@@ -34,6 +34,8 @@ import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
 import android.util.Log;
 
+import androidx.annotation.Dimension;
+
 import com.android.customization.model.ResourceConstants;
 import com.android.customization.model.theme.OverlayManagerCompat;
 import com.android.customization.model.theme.custom.ThemeComponentOption.UiStyleOption;
@@ -155,7 +157,7 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
         }
         int cornerRadius = system.getDimensionPixelOffset(
                               system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
-                                "dimen", ResourceConstants.ANDROID_PACKAGE))
+                                "dimen", ResourceConstants.ANDROID_PACKAGE));
         option.addStyleInfo(null,
                 mContext.getString(R.string.default_theme_title), lightColor, darkColor, accentColor, cornerRadius);
         option.addOverlayPackage(OVERLAY_CATEGORY_UISTYLE_SYSUI, null);
@@ -172,11 +174,11 @@ public class UiStyleOptionsProvider extends ThemeComponentOptionProvider<UiStyle
                             packageName);
             return overlayRes.getDimensionPixelOffset(overlayRes.getIdentifier(
                     CONFIG_CORNERRADIUS, "dimen", packageName));
-        catch (NameNotFoundException | NotFoundException e) {
-            Log.w(TAG, "Couldn't find athe theme corner radius, using system instead");
+        } catch (NameNotFoundException | NotFoundException e) {
+            Log.w(TAG, "Couldn't find the theme corner radius, using system instead");
+            return system.getDimensionPixelOffset(
+                       system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                           "dimen", ResourceConstants.ANDROID_PACKAGE));
         }
-        return system.getDimensionPixelOffset(
-                   system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
-                       "dimen", ResourceConstants.ANDROID_PACKAGE))
     }
 }
