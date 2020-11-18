@@ -88,7 +88,9 @@ class OverlayThemeExtractor {
                     .setBackgroundColorLight(loadColor(ResourceConstants.STYLE_BACKGROUND_COLOR_LIGHT_NAME,
                             uiStyleOverlayPackage))
                     .setBackgroundColorDark(loadColor(ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME,
-                            uiStyleOverlayPackage));
+                            uiStyleOverlayPackage))
+                    .setBottomSheetCornerRadius(
+                            loadDimen(ResourceConstants.CONFIG_CORNERRADIUS, uiStyleOverlayPackage));
         } else {
             addSystemDefaultStyle(builder);
         }
@@ -112,9 +114,7 @@ class OverlayThemeExtractor {
             builder.addOverlayPackage(getOverlayCategory(shapeOverlayPackage),
                     shapeOverlayPackage)
                     .setShapePath(
-                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage))
-                    .setBottomSheetCornerRadius(
-                            loadDimen(ResourceConstants.CONFIG_CORNERRADIUS, shapeOverlayPackage));
+                            loadString(ResourceConstants.CONFIG_ICON_MASK, shapeOverlayPackage));
         } else {
             addSystemDefaultShape(builder);
         }
@@ -213,11 +213,7 @@ class OverlayThemeExtractor {
         String iconMaskPath = system.getString(
                 system.getIdentifier(ResourceConstants.CONFIG_ICON_MASK,
                         "string", ResourceConstants.ANDROID_PACKAGE));
-        builder.setShapePath(iconMaskPath)
-                .setBottomSheetCornerRadius(
-                        system.getDimensionPixelOffset(
-                                system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
-                                        "dimen", ResourceConstants.ANDROID_PACKAGE)));
+        builder.setShapePath(iconMaskPath);
     }
 
     void addSystemDefaultColor(Builder builder) {
@@ -244,6 +240,11 @@ class OverlayThemeExtractor {
                 system.getIdentifier(ResourceConstants.STYLE_BACKGROUND_COLOR_DARK_NAME, "color",
                         ResourceConstants.ANDROID_PACKAGE), null);
         builder.setBackgroundColorDark(colorBackgroundDark);
+
+        builder.setBottomSheetCornerRadius(
+                        system.getDimensionPixelOffset(
+                                system.getIdentifier(ResourceConstants.CONFIG_CORNERRADIUS,
+                                        "dimen", ResourceConstants.ANDROID_PACKAGE)))
     }
 
     void addSystemDefaultFont(Builder builder) {
